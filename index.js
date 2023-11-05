@@ -53,11 +53,36 @@ async function run() {
     });
 
     app.delete("/delete/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) };
-        const result = await serviceCollection.deleteOne(query);
-        res.json(result);
-        });
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await serviceCollection.deleteOne(query);
+      res.json(result);
+    });
+
+    app.patch("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updatedService = req.body;
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          yourName: updatedService.yourName,
+          price: updatedService.price,
+          description: updatedService.description,
+          image: updatedService.image,
+          serviceArea: updatedService.serviceArea,
+          serviceName: updatedService.serviceName,
+          email: updatedService.email,
+        },
+      };
+      const result = await serviceCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+
+      res.json(result);
+    });
 
     app.post("/addOrder", async (req, res) => {
       const order = req.body;
@@ -66,12 +91,10 @@ async function run() {
     });
 
     app.get("/orders", async (req, res) => {
-        const cursor = cartCollection.find({});
-        const orders = await cursor.toArray();
-        res.send(orders);
-        });
-
-
+      const cursor = cartCollection.find({});
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
