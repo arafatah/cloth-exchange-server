@@ -118,11 +118,6 @@ app.get("/services", async (req, res) => {
 
 // get single service api here
 app.get("/service/:id", verifyToken, async (req, res) => {
-  console.log('Token user info here', req.user.email);
-  console.log("|hello", req.params.email);
-  // if(req.user.email !== req.params.email){
-  //   return res.status(403).send({message: 'forbidden'});
-  // }
   const id = req.params.id;
   const query = { _id: new ObjectId(id) };
   const service = await serviceCollection.findOne(query);
