@@ -125,7 +125,7 @@ app.get("/service/:id", verifyToken, async (req, res) => {
 });
 
 // get single service by email api here
-app.get("/services/:email", verifyToken, async (req, res) => {
+app.get("/services/:email", async (req, res) => {
   const email = req.params.email;
   const query = { email: email };
   const cursor = serviceCollection.find(query);
